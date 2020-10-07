@@ -39,7 +39,7 @@ class SudokuSolver:
             for row in range(s.nrows):
                 for col in range(s.ncols):
                     self.grid[row,col] = Box()
-                    self.grid[row,col].setValue(int(s.cell(row,col).value))
+                    self.grid[row,col].set_value(int(s.cell(row,col).value))
                     self.grid[row,col].x = col
                     self.grid[row,col].y = row
         
@@ -50,7 +50,7 @@ class SudokuSolver:
         for i in range(DIM):
             for j in range(DIM):
                 self.grid[i,j] = Box()
-                self.grid[i,j].setValue(int(arr[i,j]))
+                self.grid[i,j].set_value(int(arr[i,j]))
                 self.grid[i,j].x = j
                 self.grid[i,j].y = i
         self.reduce_grid()
@@ -65,9 +65,9 @@ class SudokuSolver:
                     
                     for num in vals:
                         if num in self.grid[y,x].possibilities:
-                            self.grid[y,x].removePossibility(num)
+                            self.grid[y,x].remove_possibility(num)
                     self.remove_possibilities(x,y)
-                    self.grid[y,x].checkPossibilities()
+                    self.grid[y,x].check_possibilities()
                     
         for y in range(DIM):
             for x in range(DIM):
@@ -163,7 +163,7 @@ class SudokuSolver:
             if frequencies[key] == 1:
                 for box in self.grid[ind,:]:
                     if key in box.possibilities:
-                        box.setValue(key)
+                        box.set_value(key)
                         self.remove_possibilities(box.x, box.y)
                         changes += 1
                         break
@@ -186,7 +186,7 @@ class SudokuSolver:
             if frequencies[key] == 1:
                 for box in self.grid[:,ind]:
                     if key in box.possibilities:
-                        box.setValue(key)
+                        box.set_value(key)
                         self.remove_possibilities(box.x, box.y)
                         changes += 1
                         break
@@ -209,7 +209,7 @@ class SudokuSolver:
             if frequencies[key] == 1:
                 for box in self.get_sector(x,y).reshape(DIM):
                     if key in box.possibilities:
-                        box.setValue(key)
+                        box.set_value(key)
                         self.remove_possibilities(box.x, box.y)
                         changes += 1
                         break
@@ -253,11 +253,11 @@ class SudokuSolver:
                 for box in self.grid[row,0:x*3]:
                     if key in box.possibilities:
                         changes += 1
-                        box.removePossibility(key)
+                        box.remove_possibility(key)
                 for box in self.grid[row,(x*3)+3:]:
                     if key in box.possibilities:
                         changes += 1
-                        box.removePossibility(key)
+                        box.remove_possibility(key)
         return changes
     
     def force_column(self, x, y):
@@ -278,9 +278,9 @@ class SudokuSolver:
                 changes += 1
                 col = cols[key].pop()
                 for box in self.grid[0:y*3,col]:
-                    box.removePossibility(key)
+                    box.remove_possibility(key)
                 for box in self.grid[(y*3)+3:,col]:
-                    box.removePossibility(key)
+                    box.remove_possibility(key)
         return changes
     
     # Brute force any remaining empty boxes
@@ -289,7 +289,7 @@ class SudokuSolver:
         if not solution is None:
             for i in range(DIM):
                 for j in range(DIM):
-                    self.grid[i,j].setValue(int(solution[i,j]))
+                    self.grid[i,j].set_value(int(solution[i,j]))
     
     #Finds the potential arrangements of values within each row
     def get_potential_rows(self):
@@ -351,7 +351,7 @@ class SudokuSolver:
         for grid in pot_grids:
             for i in range(DIM):
                 for j in range(DIM):
-                    test_grid.grid[i,j].setValue(grid[i,j])
+                    test_grid.grid[i,j].set_value(grid[i,j])
             tried += 1
             if test_grid.verify_completed():
                 print("Tested ",tried," Solutions Before Finding Valid")
@@ -426,19 +426,19 @@ class SudokuSolver:
         
         for box in self.grid[y,:]:
             if not box.solved:
-                box.removePossibility(val)
+                box.remove_possibility(val)
                 if box.solved:
                     self.remove_possibilities(box.x, box.y)
             
         for box in self.grid[:,x]:
             if not box.solved:
-                box.removePossibility(val)
+                box.remove_possibility(val)
                 if box.solved:
                     self.remove_possibilities(box.x, box.y)
         
         for box in self.get_sector(int(x/SUB_DIM),int(y/SUB_DIM)).reshape(DIM):
             if not box.solved:
-                box.removePossibility(val)
+                box.remove_possibility(val)
                 if box.solved:
                     self.remove_possibilities(box.x, box.y)
     

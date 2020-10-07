@@ -14,7 +14,7 @@ class Box:
         self.x = -1
         self.y = -1
     
-    def setValue(self, value):
+    def set_value(self, value):
         self.value = value
         self.temporary = value
         if value >= 1 and value <= 9:
@@ -22,16 +22,16 @@ class Box:
             self.remaining = 0
             self.possibilities = set()
     
-    def setSector(self, sector):
+    def set_sector(self, sector):
         self.sector = sector
     
-    def removePossibility(self, value):
+    def remove_possibility(self, value):
         try:
             self.possibilities.remove(value)
-            self.checkPossibilities()
+            self.check_possibilities()
         except:
             pass
     
-    def checkPossibilities(self):
+    def check_possibilities(self):
         if len(self.possibilities) == 1:
-            self.setValue(self.possibilities.pop())
+            self.set_value(self.possibilities.pop())
