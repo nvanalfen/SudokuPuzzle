@@ -5,6 +5,7 @@ Created on Wed Dec 19 01:30:57 2018
 @author: nvana
 """
 
+# Class used to represent a single box on a Sudoku grid that holds one number
 class Box:
     def __init__(self):
         self.solved = False
@@ -14,6 +15,7 @@ class Box:
         self.x = -1
         self.y = -1
     
+    # Sets the value in a box, marks it as solved, and clears the possibilities
     def set_value(self, value):
         self.value = value
         self.temporary = value
@@ -22,9 +24,8 @@ class Box:
             self.remaining = 0
             self.possibilities = set()
     
-    def set_sector(self, sector):
-        self.sector = sector
-    
+    # Removes a possibility from the set of possibilities
+    # If only one possibility remains, set the value
     def remove_possibility(self, value):
         try:
             self.possibilities.remove(value)
@@ -32,6 +33,7 @@ class Box:
         except:
             pass
     
+    # Checks the possibilities and if only one remains, set the value
     def check_possibilities(self):
         if len(self.possibilities) == 1:
             self.set_value(self.possibilities.pop())
